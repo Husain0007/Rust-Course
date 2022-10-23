@@ -3,9 +3,9 @@
 
  ## Version 1:  
 * Create a new Rust project
-```console 
-cargo new minigrep
-```
+    ```console 
+    cargo new minigrep
+    ```
 * Create binary crate ie; main.rs that handles command-line arguments and file parsing.
     *  Using: **env**, **process**, & **error::Error** modules from **std** library.
     * Create **Config** struct to handle **query** and **filename**
