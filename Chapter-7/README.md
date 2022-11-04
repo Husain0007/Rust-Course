@@ -73,3 +73,6 @@
             front_of_house::hosting::add_to_waitlist();
         }
     ```
+* Use `super` to reference functions defined in parent module.
+
+* 
