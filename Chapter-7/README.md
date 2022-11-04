@@ -75,4 +75,57 @@
     ```
 * Use `super` to reference functions defined in parent module.
 
-* 
+* Use the `use` keyword to bring functions into scope. Usually we just bring upto the parent module in scope.
+    ```rust
+        mod front_of_house{
+            pub mod hosting{
+                pub fn add_to_waitlist() {}
+            }
+        }
+
+        use self::front_of_house::hosting;
+
+        pub fn eat_at_restaurant() {
+            hosting::add_to_waitlist();
+            hosting::add_to_waitlist();
+        }
+    ```
+* If two functions or modules share a name use the `as` keyword to change it's reference name.
+    ```rust
+        use std::fmt::Result;
+        use std::io::Result as IoResult;
+
+        fn function1() -> Result {
+            Ok(())
+        }
+        fn function2() -> IoResult<()> {
+            Ok(())
+        }
+    ```
+* Use nested paths when importing many submodules from same module
+    ```rust
+        use rand;
+        use rand::Rng;
+        use rand::CryptoRng;
+
+        // Alternatively
+        use rand::{self,Rng,CryptoRng}
+
+        use std::io::*; 
+        // use glob operator to bring all public items in scope
+
+    ```
+* To reduce code size in a file we can move the content of a module or sub module to a ".rs" file with the same name as module.
+    * Consider the following folder heirarchy
+
+        ```
+        src
+        ├── front_of_house
+        │   ├── hosting.rs
+        │   └── serving.rs
+        └── front_of_house.rs
+        │
+        └── lib.rs
+        ```
+    * The module content of "front_of_house" is stored insider a file called `front_of_house.rs`
+    * The sub-module content of "hosting" and "serving" needs to be stored inside files called `hosting.rs` and `serving.rs` which live insider a folder called `front_of_house`.
