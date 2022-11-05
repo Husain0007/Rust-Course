@@ -1,4 +1,4 @@
-# Rust Module System Management
+# Chapter 7: Rust Module System Management
 * To create a new **package** in Rust.
         
     ```cmd
