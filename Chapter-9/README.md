@@ -132,4 +132,4 @@
     ```
     * The `?` operator can only be used in a function that returns `Result` or `Option`.
 * * *
-* Results Enum coupled with Error Propagation should be preferred over using the panic macro.
+* Results Enum coupled with Error Propagation should be preferred over using the panic macro. Panic should only be used when the error is unrecoverable.
