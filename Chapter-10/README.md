@@ -154,5 +154,118 @@
         }
     ```
 * * *
-# Rust Lifetimes 
+## Rust Lifetimes 
+* Dangling Reference: A reference that points to invalid data.
+* Rust uses a `Borrow Checker` at compile-time to check if all borrowed values/ references are valid.
+    ```rust
+        fn main(){                                          // a
+            let r: &i32;                                    // a
+            {                   //  b                       // a
+                let x: i32 = 5; //  b                       // a
+                r = &x;         //  b                       // a
+            }                   //  b                       // a
+            println!("r: {}", r); // compile time error     // a
+        }
+    ```
+    * The above code will not be allowed to run in Rust as `r` would hold an invalid value after the scope **b** ends.
+* Lifetime of a variable refers to how long it lives for.
+* Generic Lifetime Annotation (also known as just `Lifetimes`): describes the relationship between the lifetimes of multiple references and how they relate to each other. This does not change the *actual* lifetime, only describes it.
+* Generic Lifetime Annotations start with an `'` apostrophe symbol followed by name of the lifetime.
+    ```rust
+        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+            if x.len() > y.len() {
+                x
+            } else {
+                y
+            }
+        }
+    ```
+    * The use of `<'a>` makes it clear to the Borrow-Checker that the lifetime of the return type will be same as that of the shortest lifetime between `x` and `y` which both use the same Generic Lifetime Annotation **a**. Here `x` and `y` are the input parameters. For the below main block the Borrow-Checker will return the address of the longest string-slice from amongst `x` (a.k.a. string1).
 
+    ```rust 
+     fn main() {
+        let string1: String = String::from("abcd");
+        let string2: String = String::from("xyz");
+
+        let result: &str = longest(x: string1.as_str(), y: string2.as_str());
+        println!("The longest string is {}", result);
+    }
+    ```
+* The lifetime of a return type in a function always has to be tied to the lifetime of atleast one of the input parameters. This is because we cannot pass back reference to data created with the scope of the function. Such a reference would be invalid when the scope ends, hence the returned address would be invalid. A work around to this is just to return the type instead of it's reference, this just transfers ownership when the variable inside the function scope is destroyed.
+    ```rust
+        fn main(){
+            let string1: String = String::from("abcd");
+            let string2: String = String::from("xyz");
+            let result: String;
+            result = longest(x: string1, y: string2);
+            println!("The longest string is {}", result.as_str());
+        }
+        fn longest<'a>(x:String, y:String) -> String {
+            if x.len() > y.len() {
+                x
+            } else {
+                y
+            }
+        }
+    ```
+* To use references inside Structs we have to specify Lifetime Annotations.
+    ```rust
+        struct ImportantExcerpt<'a> {
+            part: &'a str,
+        }
+        fn main(){
+            let novel = String::from("Call me Ishmael. Some years ago...");
+            let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+            let i = ImportantExcerpt {
+                part: first_sentence,
+            };
+            println!("{}", i.part);
+        }
+    ```
+* **Lifetime Elison Rules :** The Compiler follows three rules in automatically determining the lifetime of variables. If it is unable to ascertain the lifetime using these three rules, then we have to manually specify them.
+    1. Each parameter that is a reference gets its own lifetime parameter.
+    2. If there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters.
+    3. If there are multiple input lifetime parameters, but one of them is `&self` or `&mut self` the lifetime of `self` is assigned to all output lifetime parameters. 
+* Lifetime Annotations are a type of Generics, so in `impl` blocks they have to be encorporated in the same way as a Generic Expression.
+    ```rust
+        struct ImportantExcerpt<'a> {
+            part: &'a str,
+        }
+        impl<'a> ImportantExcerpt<'a>{
+            fn return_part(&self, announcement: &str) -> &str {
+                println!("Attention please: {}", announcement);
+                self.part
+            }
+        } 
+    ```
+    * As per Rule-3 we won't need to specify a Lifetime Annotation Reference to self when returning `self.part` as the Rust Compiler automatically assigns the lifetime of `self` to all output lifetime paramters, i.e.; to all return statements.
+* **Static Lifetime :** The reference can live as long as the duration of the program. All string literals have a static lifetime.
+    ```rust
+        fn main(){
+            let s: &'static str = "I have a static lifetime.";
+        }
+    ```
+* * *
+## Putting it all Together 
+* Following snippet encorporates Generics, Traits, & Lifetimes.
+    ```rust
+        use std::mt::Displayy;
+        
+        fn longest_with_an_announcement<'a, T>(
+            x: &'a str, 
+            y: &'a str,
+            ann: T,
+            ) -> &'a str
+            where 
+            T: Display,
+        {
+            println!("Announcement! {}", ann);
+            if x.len > y.len() {
+                x
+            } else {
+                y
+            }
+        }
+        fn main() {}
+
+    ```
