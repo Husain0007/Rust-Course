@@ -9,6 +9,10 @@ impl Rectangle {
     }
 }
 
+pub fn add_two(a: i32) -> i32 {
+    a + 2
+}
+
 #[cfg(test)]
 mod tests {
     use super::*; // To gain access to functions defined outside the scope of mod test but inside the "lib.rs" file.
@@ -37,5 +41,30 @@ mod tests {
         };
 
         assert!(!smaller.can_hold(&larger));
+    }
+    #[test]
+    fn it_works() -> Result<(), String> {
+        if 2 + 2 == 4{
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+    #[test]
+    fn it_works2(){
+        assert_eq!(2 + 2, 4);
+    }
+    #[test]
+    fn add_two_and_two() {
+        assert_eq!(4, add_two(2));
+    }
+    #[test]
+    fn add_three_and_two(){
+        assert_eq!(5, add_two(3));
+    }
+    #[test]
+    #[ignore]
+    fn one_hundred() {
+        assert_eq!(102, add_two(100));
     }
 }
