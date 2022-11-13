@@ -166,6 +166,8 @@
     ├── target
     │   └── debug
     └── tests
+        ├── common
+        │   └──mod.rs
         └── integration_test.rs
     ```
     * Cargo converts each file inside the `tests` directoy into a crate.
@@ -175,3 +177,4 @@
     ```
     * Is used to just test the tests defined inside the `integration_test.rs` file inside the `tests` folder.
     * We cannot test a binary crate(main.rs) with integration tests, only library crates (lib.rs).
+    * To create shared functionality between different test functions we need to define that functionality inside a sub-folder in `tests`.
