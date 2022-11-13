@@ -1,4 +1,4 @@
-use std::env; 
+use std::env; // This module contains functions to take user-input
 use std::process;
 use minigrep::Config;
 use minigrep::run;

@@ -34,7 +34,7 @@ impl Config{
         }
         let query: String = args[1].clone();
         let filename: String = args[2].clone(); // let filename = &args[2] also works
-
+ 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err(); // if the environment variable is not set we get an error which return "false" to "case_sensitive"
     
         Ok(Config { query, filename, case_sensitive})
