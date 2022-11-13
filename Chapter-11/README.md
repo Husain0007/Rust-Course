@@ -177,4 +177,5 @@
     ```
     * Is used to just test the tests defined inside the `integration_test.rs` file inside the `tests` folder.
     * We cannot test a binary crate(main.rs) with integration tests, only library crates (lib.rs).
-    * To create shared functionality between different test functions we need to define that functionality inside a sub-folder in `tests`.
+    * To create shared functionality between different test functions we need to define that functionality inside a sub-folder in `tests`. The sub-folder called `common` is then populated with the file `mod.rs` which enables Rust to retrieve the shared functionality as a module in `integration_test.rs`.
+        ```
