@@ -1,4 +1,7 @@
-# Chapter 13: Closures
+# Chapter 13: Closures & Iterators
+
+
+## Closures
 
 * Closures are anonymous functions. 
 * They can be stored as variables and passed around.
@@ -118,3 +121,37 @@
             assert!(equal_to_x(y));
         }
     ```
+
+* * *
+## Iterators
+* The iterators pattern allows us to iterate over a sequence of items regardless of how they are stored.
+    ```rust
+        fn main() {
+            let v1 = vec![1, 2, 3 ];
+            let v1_iter = v1.iter(); // Lazy Iterator
+        }
+    ```
+    * Iterators in Rust are lazy by default until runtime. 
+* Iterators are a part of the Rust Standard Library. All iterators implement the `Iterator` trait.
+    ```rust
+        pub trait Iterator {
+            type Item;
+            fn next(&mut self) -> Option<Self::Item>; 
+        }
+    ```
+* We can use the map operator to create new iterators.
+    ```rust
+        fn main(){
+            let v1: Vec<i32> = vec![1, 2, 3];
+            let v2: Vec<_>  = v1.iter().map(|x: &i32| x+1).collect();
+        }
+    ```
+    * The above code increments the value at iterator `v1` by 1 using the `map()` method, this is then followed by the `collect()` method which collects all the outputs and forms a vector collection called `v2`.
+
+* To take ownership of a collection type we can use a special type of iterator called `into_iter()`. The following example uses a closure input that performs a check on each entry of an iterator.
+    ```rust
+        fn shoes_in_my_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
+            shoes.into_iter().filter(|s: &Shoe| s.size == shoe_size).collect()
+        }
+    ```
+    * The closure defined inside the `filter()` function is able to make use of Shoe size parameters from it's parent environment. 
