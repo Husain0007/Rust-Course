@@ -1,4 +1,4 @@
-# Chapter 12: Testing in Rust
+# Chapter 11: Testing in Rust
 
 
 ## Writing Tests
