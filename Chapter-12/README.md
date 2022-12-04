@@ -29,3 +29,31 @@
         cargo run to poem.txt > output.txt 
     ```
 
+   * * *
+ ## Version 3:
+   * Substituting array reference in `Config` block of `lib.rs` with an Iterator.To accomplish this we change from using `collect()` to create a list, to instead just using the iterator in `main.rs`  
+      ```rust
+         let config = Config::new(env::args()).unwrap_or_else(|err|{
+               eprintln!("Problem parsing arguments: {}", err);
+               process::exit(1);
+            }); // Use this^ instead of below
+         //******//
+         let args: Vec<String> = env::args().collect();
+
+         let config = Config::new(&args).unwrap_or_else(|err|{
+            eprintln!("Problem parsing arguments: {}", err);
+            process::exit(1);
+         });
+      ```
+   * Simplify the search function to use iterators instead of for loops with vectors. First create an iterator by calling `contents.lines()`, filter the desired lines by examining all iterable values for the `query` and then call `collect()` to combine all valid iterable values into a vector of type `string`.
+      ```rust
+            pub fn search <'a>(query: &str, contents: &'a str) -> Vec<&'a str>{
+               contents: &str
+                  .lines(): Lines
+                  .filter(|line: &&str| line.contains(query)): imp Iterator<Item = &str>
+                  .collect()
+            }
+      ```
+   * As Rust follows the zero level abstraction principle, by using iterators over loops we don't observe any difference in performance. Using iterators however is preferred since it unlocks a higher of abstraction and access to functions such as `filter()` and `collect()`.
+
+
